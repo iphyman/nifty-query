@@ -1,0 +1,141 @@
+version: "3"
+
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: ./docker/pg-Dockerfile
+    ports:
+      - 5432:5432
+    volumes:
+      - .data/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # subquery-node-astar:
+  #   image: onfinality/subql-node-ethereum:latest
+  #   depends_on:
+  #     "postgres":
+  #       condition: service_healthy
+  #   restart: always
+  #   environment:
+  #     DB_USER: postgres
+  #     DB_PASS: postgres
+  #     DB_DATABASE: postgres
+  #     DB_HOST: postgres
+  #     DB_PORT: 5432
+  #   volumes:
+  #     - ./:/app
+  #   command:
+  #     - -f=app/project-astar.yaml
+  #     - --multi-chain
+  #     - --db-schema=nifty-queries
+  #     - --disable-historical
+  #     - --unsafe
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://subquery-node-astar:3001/ready"]
+  #     interval: 3s
+  #     timeout: 5s
+  #     retries: 10
+
+  # subquery-node-moonbeam:
+  #   image: onfinality/subql-node-ethereum:latest
+  #   depends_on:
+  #     "postgres":
+  #       condition: service_healthy
+  #   restart: always
+  #   environment:
+  #     DB_USER: postgres
+  #     DB_PASS: postgres
+  #     DB_DATABASE: postgres
+  #     DB_HOST: postgres
+  #     DB_PORT: 5432
+  #   volumes:
+  #     - ./:/app
+  #   command:
+  #     - -f=app/project-moonbeam.yaml
+  #     - --multi-chain
+  #     - --db-schema=nifty-queries
+  #     - --disable-historical
+  #     - --unsafe
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://subquery-node-moonbeam:3002/ready"]
+  #     interval: 3s
+  #     timeout: 5s
+  #     retries: 10
+
+  subquery-node-moonriver:
+    image: onfinality/subql-node-ethereum:latest
+    depends_on:
+      "postgres":
+        condition: service_healthy
+    restart: always
+    environment:
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_DATABASE: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+    volumes:
+      - ./:/app
+    command:
+      - -f=app/project-moonriver.yaml
+      # - --multi-chain
+      - --db-schema=nifty-queries
+      - --disable-historical
+      - --unsafe
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://subquery-node-moonriver:3003/ready"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+
+  # subquery-node-shiden:
+  #   image: onfinality/subql-node-ethereum:latest
+  #   depends_on:
+  #     "postgres":
+  #       condition: service_healthy
+  #   restart: always
+  #   environment:
+  #     DB_USER: postgres
+  #     DB_PASS: postgres
+  #     DB_DATABASE: postgres
+  #     DB_HOST: postgres
+  #     DB_PORT: 5432
+  #   volumes:
+  #     - ./:/app
+  #   command:
+  #     - -f=app/project-shiden.yaml
+  #     - --multi-chain
+  #     - --db-schema=nifty-queries
+  #     - --disable-historical
+  #     - --unsafe
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://subquery-node-shiden:3004/ready"]
+  #     interval: 3s
+  #     timeout: 5s
+  #     retries: 10
+
+  graphql-engine:
+    image: onfinality/subql-query:latest
+    ports:
+      - 3000:3000
+    depends_on:
+      "postgres":
+        condition: service_healthy
+    restart: always
+    environment:
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_DATABASE: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+    command:
+      - --name=nifty-queries
+      - --playground
+      # - --indexer=http://subquery-node:3000

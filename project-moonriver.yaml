@@ -1,0 +1,62 @@
+specVersion: "1.0.0"
+
+name: "nifty-query"
+version: "0.0.1"
+runner:
+  node:
+    name: "@subql/node-ethereum"
+    version: "*"
+  query:
+    name: "@subql/query"
+    version: "*"
+description: "A multi-chain nft indexer for Astar, Moonbeam, Moonriver and Shiden"
+repository: "https://github.com/iphyman/nifty-query"
+
+schema:
+  file: "./schema.graphql"
+
+network:
+  chainId: "1285"
+  endpoint:
+    # - wss://moonriver.api.onfinality.io/public-ws
+    - https://rpc.api.moonriver.moonbeam.network
+  dictionary: "https://api.subquery.network/sq/subquery/moonriver-dictionary"
+
+dataSources:
+  - kind: ethereum/Runtime
+    startBlock: 4519378
+    options:
+      abi: erc721
+    assets:
+      erc721:
+        file: "./abis/erc721.abi.json"
+    mapping:
+      file: "./dist/index.js"
+      handlers:
+        - handler: handleMoonriverTransfer
+          kind: ethereum/LogHandler
+          filter:
+            topics:
+              - Transfer(address indexed from, address indexed to, uint256 indexed tokenId)
+              # - address: "0x60781C2586D68229fde47564546784ab3fACA982"
+  - kind: ethereum/Runtime
+    startBlock: 817352
+    options:
+      abi: moonbeans
+      address: "0x16d7Edd3A562BB60aA0B3Af357A2c195cE2AA974"
+    assets:
+      moonbeans:
+        file: "./abis/moonbeans.abi.json"
+    mapping:
+      file: "./dist/index.js"
+      handlers:
+        - handler: handleMoonriverMoonbeansListing
+          kind: ethereum/LogHandler
+          filter:
+            topics:
+              - TokenListed(address indexed token, uint256 indexed id, uint256 indexed price, uint256 timestamp)
+        - handler: handleMoonriverMoonbeansSale
+          kind: ethereum/LogHandler
+          filter:
+            topics:
+              - TokenPurchased(address indexed oldOwner, address indexed newOwner, uint256 indexed price, address collection, uint256 tokenId)

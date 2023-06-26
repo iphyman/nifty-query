@@ -1,0 +1,281 @@
+[
+    {
+        "type": "event",
+        "name": "EvInventoryUpdate",
+        "inputs": [
+            {
+                "type": "uint256",
+                "name": "id",
+                "internalType": "uint256",
+                "indexed": true
+            },
+            {
+                "type": "tuple",
+                "name": "inventory",
+                "internalType": "struct",
+                "indexed": false,
+                "components": [
+                    {
+                        "type": "address",
+                        "name": "seller",
+                        "internalType": "address"
+                    },
+                    {
+                        "type": "address",
+                        "name": "buyer",
+                        "internalType": "address"
+                    },
+                    {
+                        "type": "address",
+                        "name": "currency",
+                        "internalType": "contract"
+                    },
+                    {
+                        "type": "uint256",
+                        "name": "price",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "type": "uint256",
+                        "name": "netPrice",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "type": "uint256",
+                        "name": "deadline",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "type": "uint8",
+                        "name": "kind",
+                        "internalType": "uint8"
+                    },
+                    {
+                        "type": "uint8",
+                        "name": "status",
+                        "internalType": "uint8"
+                    }
+                ]
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "function",
+        "stateMutability": "payable",
+        "outputs": [],
+        "name": "run",
+        "inputs": [
+            {
+                "type": "tuple",
+                "name": "intent",
+                "internalType": "struct",
+                "components": [
+                    {
+                        "type": "address",
+                        "name": "user",
+                        "internalType": "address"
+                    },
+                    {
+                        "type": "tuple[]",
+                        "name": "bundle",
+                        "internalType": "struct[]",
+                        "components": [
+                            {
+                                "type": "address",
+                                "name": "token",
+                                "internalType": "address"
+                            },
+                            {
+                                "type": "uint256",
+                                "name": "tokenId",
+                                "internalType": "uint256"
+                            },
+                            {
+                                "type": "uint256",
+                                "name": "amount",
+                                "internalType": "uint256"
+                            },
+                            {
+                                "type": "uint8",
+                                "name": "kind",
+                                "internalType": "uint8"
+                            },
+                            {
+                                "type": "bytes",
+                                "name": "mintData",
+                                "internalType": "bytes"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "address",
+                        "name": "currency",
+                        "internalType": "contract"
+                    },
+                    {
+                        "type": "uint256",
+                        "name": "price",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "type": "uint256",
+                        "name": "deadline",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "type": "bytes32",
+                        "name": "salt",
+                        "internalType": "bytes32"
+                    },
+                    {
+                        "type": "uint8",
+                        "name": "kind",
+                        "internalType": "uint8"
+                    }
+                ]
+            },
+            {
+                "type": "tuple",
+                "name": "detail",
+                "internalType": "struct",
+                "components": [
+                    {
+                        "type": "bytes32",
+                        "name": "intentionHash",
+                        "internalType": "bytes32"
+                    },
+                    {
+                        "type": "address",
+                        "name": "signer",
+                        "internalType": "address"
+                    },
+                    {
+                        "type": "uint256",
+                        "name": "txDeadline",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "type": "bytes32",
+                        "name": "salt",
+                        "internalType": "bytes32"
+                    },
+                    {
+                        "type": "uint256",
+                        "name": "id",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "type": "uint8",
+                        "name": "opcode",
+                        "internalType": "uint8"
+                    },
+                    {
+                        "type": "address",
+                        "name": "caller",
+                        "internalType": "address"
+                    },
+                    {
+                        "type": "address",
+                        "name": "currency",
+                        "internalType": "contract"
+                    },
+                    {
+                        "type": "uint256",
+                        "name": "price",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "type": "uint256",
+                        "name": "incentiveRate",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "type": "tuple",
+                        "name": "settlement",
+                        "internalType": "struct",
+                        "components": [
+                            {
+                                "type": "uint256[]",
+                                "name": "coupons",
+                                "internalType": "uint256[]"
+                            },
+                            {
+                                "type": "uint256",
+                                "name": "feeRate",
+                                "internalType": "uint256"
+                            },
+                            {
+                                "type": "uint256",
+                                "name": "royaltyRate",
+                                "internalType": "uint256"
+                            },
+                            {
+                                "type": "uint256",
+                                "name": "buyerCashbackRate",
+                                "internalType": "uint256"
+                            },
+                            {
+                                "type": "address",
+                                "name": "feeAddress",
+                                "internalType": "address"
+                            },
+                            {
+                                "type": "address",
+                                "name": "royaltyAddress",
+                                "internalType": "address"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "tuple[]",
+                        "name": "bundle",
+                        "internalType": "struct[]",
+                        "components": [
+                            {
+                                "type": "address",
+                                "name": "token",
+                                "internalType": "address"
+                            },
+                            {
+                                "type": "uint256",
+                                "name": "tokenId",
+                                "internalType": "uint256"
+                            },
+                            {
+                                "type": "uint256",
+                                "name": "amount",
+                                "internalType": "uint256"
+                            },
+                            {
+                                "type": "uint8",
+                                "name": "kind",
+                                "internalType": "uint8"
+                            },
+                            {
+                                "type": "bytes",
+                                "name": "mintData",
+                                "internalType": "bytes"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "uint256",
+                        "name": "deadline",
+                        "internalType": "uint256"
+                    }
+                ]
+            },
+            {
+                "type": "bytes",
+                "name": "sigIntent",
+                "internalType": "bytes"
+            },
+            {
+                "type": "bytes",
+                "name": "sigDetail",
+                "internalType": "bytes"
+            }
+        ]
+    }
+]

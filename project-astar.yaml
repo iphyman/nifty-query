@@ -1,0 +1,57 @@
+specVersion: "1.0.0"
+
+name: "nifty-query"
+version: "0.0.1"
+runner:
+  node:
+    name: "@subql/node-ethereum"
+    version: "*"
+  query:
+    name: "@subql/query"
+    version: "*"
+description: "A multi-chain nft indexer for Astar, Moonbeam, Moonriver and Shiden"
+repository: "https://github.com/iphyman/nifty-query"
+
+schema:
+  file: "./schema.graphql"
+
+network:
+  chainId: "592"
+  endpoint:
+    # - https://astar.api.onfinality.io/public
+    # - wss://astar.api.onfinality.io/public-ws
+    - https://1rpc.io/astr
+  dictionary: "https://api.subquery.network/sq/subquery/astar-dictionary"
+
+dataSources:
+  - kind: ethereum/Runtime
+    startBlock: 0
+    options:
+      abi: tofuNft
+      address: "0x7Cae7FeB55349FeADB8f84468F692450D92597bc"
+    assets:
+      tofuNft:
+        file: "./abis/tofuNft.abi.json"
+    mapping:
+      file: "./dist/index.js"
+      handlers:
+        - handler: handleAstarTofuSale
+          kind: ethereum/TransactionHandler
+          filter:
+            function: function run(tuple(address user,tuple(address token,uint256 tokenId,uint256 amount,uint8 kind,bytes mintData)[] bundle,address currency,uint256 price,uint256 deadline,bytes32 salt,uint8 kind) intent,tuple(bytes32 intentionHash,address signer,uint256 txDeadline,bytes32 salt,uint256 id,uint8 opcode,address caller,address currency,uint256 price,uint256 incentiveRate,tuple(uint256[] coupons,uint256 feeRate,uint256 royaltyRate,uint256 buyerCashbackRate,address feeAddress,address royaltyAddress) settlement,tuple(address token,uint256 tokenId,uint256 amount,uint8 kind,bytes mintData)[] bundle,uint256 deadline) detail,bytes sigIntent,bytes sigDetail)
+  - kind: ethereum/Runtime
+    startBlock: 0
+    options:
+      abi: erc721
+    assets:
+      erc721:
+        file: "./abis/erc721.abi.json"
+    mapping:
+      file: "./dist/index.js"
+      handlers:
+        - handler: handleAstarTransfer
+          kind: ethereum/LogHandler
+          filter:
+            topics:
+              - Transfer(indexed address,indexed address,indexed uint256)
+              # address: "0x60781C2586D68229fde47564546784ab3fACA982"

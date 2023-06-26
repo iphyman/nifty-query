@@ -1,0 +1,121 @@
+# To improve query performance, we strongly suggest adding indexes to any field that you plan to filter or sort by
+# Add the `@index` or `@index(unique: true)` annotation after any non-key field
+# https://academy.subquery.network/build/graphql.html#indexing-by-non-primary-key-field
+
+enum Network {
+  ASTAR
+  MOONBEAM
+  MOONRIVER
+  SHIDEN
+}
+
+enum Marketplace {
+  TOFUNFT
+  MOONBEANS
+}
+
+type Attribute @jsonField {
+  trait_type: String
+  value: String
+}
+
+type Metadata @jsonField {
+  name: String
+  description: String
+  image: String
+  external_url: String
+  attributes: [Attribute]
+}
+
+type Account @entity {
+  "network/account address"
+  id: ID!
+  "Account address"
+  address: String!
+  "Blockchain network"
+  network: Network!
+}
+
+type Collection
+  @entity
+  @compositeIndexes(fields: [["network", "contractAddress"]]) {
+  "network + contractAddress"
+  id: ID!
+  "Deployed blockchain network"
+  network: Network!
+  "Contract address"
+  contractAddress: String!
+  "Collection name"
+  name: String
+  "Collection symbol"
+  symbol: String
+  "List of nfts"
+  nfts: [Nft!]! @derivedFrom(field: "collection")
+  "The lowest price for an item in this collection"
+  floorPrice: Float!
+}
+
+type Nft
+  @entity
+  @compositeIndexes(
+    fields: [["network", "collection"], ["collection", "tokenId"]]
+  ) {
+  "netowrk + collectionAddress + tokenId"
+  id: ID!
+  "Deployed blockchain network"
+  network: Network!
+  "Id of nft token"
+  tokenId: BigInt!
+  "Collection where this nft belongs to"
+  collection: Collection!
+  "The block height at which nft was minted or created"
+  block: BigInt!
+  "The unix timestamp of the block at which nft was minted or created"
+  timestamp: Int!
+  "The name of nft"
+  name: String
+  "Nft metadata URL"
+  uri: String
+  "Nft image URL"
+  image: String
+  "Nft description"
+  description: String
+  "Nft metadata"
+  metadata: Metadata
+  "The current owner of this token"
+  owner: Account!
+  "Nft transfer history"
+  transfers: [NftTransfers!]! @derivedFrom(field: "nft")
+  "Market price of listed nft"
+  price: Price
+}
+
+type Price @entity {
+  "network + collectionAddress + tokenId"
+  id: ID!
+  "Current item price"
+  amount: Float!
+  "Token address, null for items priced in native token"
+  currency: String
+  "The marketplace where nft is listed for sale"
+  marketplace: Marketplace!
+}
+
+type NftTransfers @entity {
+  "network-blocknumber-logIndex"
+  id: ID!
+  "Deployed blockchain network"
+  network: Network!
+  "Nft being transfered"
+  nft: Nft!
+  "The block height at which transaction occured"
+  block: BigInt!
+  "The unix timestamp of block that contains this transfer transaction"
+  timestamp: Int!
+  "The transaction id"
+  transactionId: String!
+  "Source nft account"
+  from: Account!
+  "Destination nft account"
+  to: Account!
+}

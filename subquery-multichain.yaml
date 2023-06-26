@@ -1,0 +1,9 @@
+specVersion: 1.0.0
+query:
+  name: "@subql/query"
+  version: "*"
+projects:
+  - project-astar.yaml
+  - project-moonbeam.yaml
+  - project-moonriver.yaml
+  - project-shiden.yaml
