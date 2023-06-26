@@ -6,31 +6,35 @@ import { Collection, NftTransfers } from "../types/models";
 import { RunTransaction } from "../types/abi-interfaces/TofuNftAbi";
 
 export async function handleAstarTransfer(log: TransferLog): Promise<void> {
+  if (log.topics.length !== 4) return;
   logger.info(`New Nft transfer transaction log at block ${log.blockNumber}`);
   assert(log.args, "No log.args");
 
   let collection = await getCollection(log.address, Network.ASTAR);
   let nft = await getNft(collection.network, log);
-  let from = await getAccount(log.args.from);
-  let to = await getAccount(log.args.to);
 
-  const id = [
-    Network.ASTAR,
-    log.blockNumber.toString(),
-    log.logIndex.toString(),
-  ].join("-");
-  let event = NftTransfers.create({
-    id,
-    network: nft.network,
-    nftId: nft.id,
-    block: BigInt(log.blockNumber),
-    timestamp: parseInt(log.block.timestamp.toString()),
-    transactionId: log.transactionHash,
-    fromId: from.id,
-    toId: to.id,
-  });
+  if (nft) {
+    let from = await getAccount(log.args.from);
+    let to = await getAccount(log.args.to);
 
-  await event.save();
+    const id = [
+      Network.ASTAR,
+      log.blockNumber.toString(),
+      log.logIndex.toString(),
+    ].join("-");
+    let event = NftTransfers.create({
+      id,
+      network: nft.network,
+      nftId: nft.id,
+      block: BigInt(log.blockNumber),
+      timestamp: parseInt(log.block.timestamp.toString()),
+      transactionId: log.transactionHash,
+      fromId: from.id,
+      toId: to.id,
+    });
+
+    await event.save();
+  }
 }
 
 export async function handleAstarTofuSale(tx: RunTransaction) {

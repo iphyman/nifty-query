@@ -24,7 +24,7 @@ network:
 
 dataSources:
   - kind: ethereum/Runtime
-    startBlock: 817352
+    startBlock: 442091
     options:
       abi: erc721
       # address: "0x08716e418e68564C96b68192E985762740728018"

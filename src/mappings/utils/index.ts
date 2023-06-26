@@ -4,6 +4,17 @@ import { Erc721Abi__factory } from "../../types/contracts";
 import { Account, Collection, Nft } from "../../types/models";
 import fetch from "node-fetch";
 
+export const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000";
+
+function isValidUrl(url: string) {
+  try {
+    new URL(url);
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
 function decodeURL(url: string) {
   const protocol = url.split(":")[0].toLowerCase();
 
@@ -39,7 +50,10 @@ function decodeURL(url: string) {
 }
 
 async function decodeTokenURI(tokenURI: string) {
+  logger.info(`Docoding uri: ${tokenURI}`);
   const { url } = decodeURL(tokenURI);
+
+  if (!isValidUrl(url)) return null;
 
   const resp = await fetch(url);
   const data = await resp.json();
@@ -97,23 +111,25 @@ export async function getNft(network: Network, event: TransferLog) {
   const tokenURI = await contract.tokenURI(event.args!.tokenId);
   const metadata = await decodeTokenURI(tokenURI);
 
-  nft = Nft.create({
-    id,
-    network,
-    tokenId: event.args!.tokenId.toBigInt(),
-    collectionId,
-    block: BigInt(event.blockNumber),
-    timestamp: parseInt(event.block.timestamp.toString()),
-    ownerId: owner.id,
-    uri: tokenURI,
-    name: metadata?.name,
-    description: metadata?.description,
-    image: metadata?.image,
-    ...(metadata ? metadata : null),
-  });
+  if (tokenURI && metadata) {
+    nft = Nft.create({
+      id,
+      network,
+      tokenId: event.args!.tokenId.toBigInt(),
+      collectionId,
+      block: BigInt(event.blockNumber),
+      timestamp: parseInt(event.block.timestamp.toString()),
+      ownerId: owner.id,
+      uri: tokenURI,
+      name: metadata?.name,
+      description: metadata?.description,
+      image: metadata?.image,
+      metadata,
+    });
 
-  await nft.save();
-  return nft;
+    await nft.save();
+    return nft;
+  }
 }
 
 export async function getAccount(address: string) {
