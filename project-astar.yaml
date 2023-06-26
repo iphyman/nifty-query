@@ -25,7 +25,23 @@ network:
 
 dataSources:
   - kind: ethereum/Runtime
-    startBlock: 0
+    startBlock: 225714
+    options:
+      abi: erc721
+    assets:
+      erc721:
+        file: "./abis/erc721.abi.json"
+    mapping:
+      file: "./dist/index.js"
+      handlers:
+        - handler: handleAstarTransfer
+          kind: ethereum/LogHandler
+          filter:
+            topics:
+              - Transfer(address indexed from, address indexed to, uint256 indexed tokenId)
+  # TofuNft Marketplace
+  - kind: ethereum/Runtime
+    startBlock: 225714
     options:
       abi: tofuNft
       address: "0x7Cae7FeB55349FeADB8f84468F692450D92597bc"
@@ -39,19 +55,3 @@ dataSources:
           kind: ethereum/TransactionHandler
           filter:
             function: function run(tuple(address user,tuple(address token,uint256 tokenId,uint256 amount,uint8 kind,bytes mintData)[] bundle,address currency,uint256 price,uint256 deadline,bytes32 salt,uint8 kind) intent,tuple(bytes32 intentionHash,address signer,uint256 txDeadline,bytes32 salt,uint256 id,uint8 opcode,address caller,address currency,uint256 price,uint256 incentiveRate,tuple(uint256[] coupons,uint256 feeRate,uint256 royaltyRate,uint256 buyerCashbackRate,address feeAddress,address royaltyAddress) settlement,tuple(address token,uint256 tokenId,uint256 amount,uint8 kind,bytes mintData)[] bundle,uint256 deadline) detail,bytes sigIntent,bytes sigDetail)
-  - kind: ethereum/Runtime
-    startBlock: 0
-    options:
-      abi: erc721
-    assets:
-      erc721:
-        file: "./abis/erc721.abi.json"
-    mapping:
-      file: "./dist/index.js"
-      handlers:
-        - handler: handleAstarTransfer
-          kind: ethereum/LogHandler
-          filter:
-            topics:
-              - Transfer(indexed address,indexed address,indexed uint256)
-              # address: "0x60781C2586D68229fde47564546784ab3fACA982"

@@ -1,112 +1,19 @@
-# SubQuery - Starter Package
+# NiftQuery
 
-The Starter Package is an example that you can use as a starting point for developing your SubQuery project.
-A SubQuery package defines which data The SubQuery will index from the blockchain, and how it will store it.
+NiftyQuery is a meticulously designed and highly detailed ERC721 Non-Fungible Token (NFT) standard indexer. This exceptional indexer is capable of efficiently indexing NFTs across various prominent blockchains, including Astar, Moonbeam, Moonriver, and Shidden. To achieve this remarkable feat, we leverage the powerful SubQuery multi-chain indexing solution, which enables seamless indexing across multiple blockchains simultaneously. The primary objective of this indexer is to provide a unified and streamlined experience for users by exposing a single, all-encompassing GraphQL API that facilitates querying across these diverse blockchains.
 
-This SubQuery Ethereum starter project indexes transfers and approvals for the Ethereum Wrapped Ether smart contract. 
+At the heart of this indexer lies its ability to index ERC721 NFTs, a widely adopted standard for representing unique and indivisible digital assets on blockchain networks. By employing this standard, our indexer ensures compatibility and interoperability across different blockchains, making it an ideal solution for users seeking to explore NFTs across multiple ecosystems.
 
-Note: If the starter project shows a "failed to fetch blocks", it is highly likely that the endpoint has an issue, often with rate limiting. Please visit https://onfinality.io/ and sign up for a free API key.
+The first blockchain in our indexing repertoire is Astar, a cutting-edge blockchain platform renowned for its scalability and developer-friendly environment. With our indexer, Astar's NFT ecosystem becomes effortlessly accessible, enabling users to explore, query, and analyze a plethora of unique assets securely stored on this blockchain.
 
-## Preparation
+Moving on, we seamlessly integrate with Moonbeam, a highly compatible Ethereum Virtual Machine (EVM) implementation on Polkadot, to extend our indexing capabilities to this blockchain. Moonbeam's bridge to Ethereum allows for easy migration of existing Ethereum-based NFTs, while also providing a vibrant ecosystem of its own. Our indexer empowers users to dive into Moonbeam's NFT landscape with unparalleled ease.
 
-#### Environment
+Additionally, our indexer extends its reach to Moonriver, an essential network within the Moonbeam ecosystem. By supporting Moonriver, we ensure that users have access to a wide array of NFTs residing on this blockchain, enjoying the same level of functionality and convenience as with any other supported blockchain.
 
-- [Typescript](https://www.typescriptlang.org/) are required to compile project and define types.
+Furthermore, we encompass Shidden, a blockchain platform renowned for its unique privacy and anonymity features. Our indexer enables users to navigate the world of Shidden NFTs with remarkable precision, uncovering hidden treasures while preserving the utmost privacy of participants.
 
-- Both SubQuery CLI and generated Project have dependencies and require [Node](https://nodejs.org/en/).
+To achieve the formidable task of indexing NFTs across these diverse blockchains, we leverage the powerful SubQuery multi-chain indexing solution. SubQuery's robust infrastructure allows us to synchronize, parse, and organize NFT-related data from each blockchain, ensuring a comprehensive and accurate indexing process. By harnessing the capabilities of SubQuery, we can seamlessly handle the complexity of multiple blockchains while maintaining optimal performance and reliability.
 
-#### Install the SubQuery CLI
+Finally, our indexer takes pride in its ability to expose a unified GraphQL API, simplifying the querying process for users across all supported blockchains. GraphQL provides a flexible and efficient means of requesting specific data, allowing users to tailor their queries to their precise requirements. With our unified API, users can seamlessly search for NFTs, retrieve detailed information, and perform complex analyses across Astar, Moonbeam, Moonriver, and Shidden—all through a single entry point.
 
-Install SubQuery CLI globally on your terminal by using NPM:
-
-```
-npm install -g @subql/cli
-```
-
-Run help to see available commands and usage provide by CLI
-
-```
-subql help
-```
-
-## Initialize the starter package
-
-Inside the directory in which you want to create the SubQuery project, simply replace `project-name` with your project name and run the command:
-
-```
-subql init --starter project-name
-```
-
-Then you should see a folder with your project name has been created inside the directory, you can use this as the start point of your project. And the files should be identical as in the [Directory Structure](https://doc.subquery.network/directory_structure.html).
-
-Last, under the project directory, run following command to install all the dependency.
-
-```
-yarn install
-```
-
-## Configure your project
-
-In the starter package, we have provided a simple example of project configuration. You will be mainly working on the following files:
-
-- The Manifest in `project.yaml`
-- The GraphQL Schema in `schema.graphql`
-- The Mapping functions in `src/mappings/` directory
-
-For more information on how to write the SubQuery,
-check out our doc section on [Define the SubQuery](https://doc.subquery.network/define_a_subquery.html)
-
-#### Code generation
-
-In order to index your SubQuery project, it is mandatory to build your project first.
-Run this command under the project directory.
-
-```
-yarn codegen
-```
-
-## Build the project
-
-In order to deploy your SubQuery project to our hosted service, it is mandatory to pack your configuration before upload.
-Run pack command from root directory of your project will automatically generate a `your-project-name.tgz` file.
-
-```
-yarn build
-```
-
-## Indexing and Query
-
-#### Run required systems in docker
-
-Under the project directory run following command:
-
-```
-docker-compose pull && docker-compose up
-```
-
-#### Query the project
-
-Open your browser and head to `http://localhost:3000`.
-
-Finally, you should see a GraphQL playground is showing in the explorer and the schemas that ready to query.
-
-For the `subql-starter` project, you can try to query with the following code to get a taste of how it works.
-
-```graphql
-{
-  query {
-    transactions(first:2 orderBy:BLOCK_HEIGHT_ASC){
-      totalCount
-        nodes{
-          id
-          txHash
-          blockHeight
-          to
-          from
-          value
-          contractAddress
-        }
-    }
-  }
-}
-```
+In conclusion, our ERC721 NFT standard indexer represents an extraordinary achievement in the field of blockchain indexing. By leveraging the power of SubQuery's multi-chain indexing solution, we seamlessly navigate the NFT ecosystems of Astar, Moonbeam, Moonriver, and Shidden. Through our meticulously designed GraphQL API, users gain unparalleled access to a vast array of NFTs across these blockchains, revolutionizing the way they explore, interact with, and analyze unique digital assets.

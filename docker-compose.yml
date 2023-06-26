@@ -17,57 +17,57 @@ services:
       timeout: 5s
       retries: 5
 
-  # subquery-node-astar:
-  #   image: onfinality/subql-node-ethereum:latest
-  #   depends_on:
-  #     "postgres":
-  #       condition: service_healthy
-  #   restart: always
-  #   environment:
-  #     DB_USER: postgres
-  #     DB_PASS: postgres
-  #     DB_DATABASE: postgres
-  #     DB_HOST: postgres
-  #     DB_PORT: 5432
-  #   volumes:
-  #     - ./:/app
-  #   command:
-  #     - -f=app/project-astar.yaml
-  #     - --multi-chain
-  #     - --db-schema=nifty-queries
-  #     - --disable-historical
-  #     - --unsafe
-  #   healthcheck:
-  #     test: ["CMD", "curl", "-f", "http://subquery-node-astar:3001/ready"]
-  #     interval: 3s
-  #     timeout: 5s
-  #     retries: 10
+  subquery-node-astar:
+    image: onfinality/subql-node-ethereum:latest
+    depends_on:
+      "postgres":
+        condition: service_healthy
+    restart: always
+    environment:
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_DATABASE: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+    volumes:
+      - ./:/app
+    command:
+      - -f=app/project-astar.yaml
+      - --multi-chain
+      - --db-schema=nifty-queries
+      - --disable-historical
+      - --unsafe
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://subquery-node-astar:3001/ready"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
 
-  # subquery-node-moonbeam:
-  #   image: onfinality/subql-node-ethereum:latest
-  #   depends_on:
-  #     "postgres":
-  #       condition: service_healthy
-  #   restart: always
-  #   environment:
-  #     DB_USER: postgres
-  #     DB_PASS: postgres
-  #     DB_DATABASE: postgres
-  #     DB_HOST: postgres
-  #     DB_PORT: 5432
-  #   volumes:
-  #     - ./:/app
-  #   command:
-  #     - -f=app/project-moonbeam.yaml
-  #     - --multi-chain
-  #     - --db-schema=nifty-queries
-  #     - --disable-historical
-  #     - --unsafe
-  #   healthcheck:
-  #     test: ["CMD", "curl", "-f", "http://subquery-node-moonbeam:3002/ready"]
-  #     interval: 3s
-  #     timeout: 5s
-  #     retries: 10
+  subquery-node-moonbeam:
+    image: onfinality/subql-node-ethereum:latest
+    depends_on:
+      "postgres":
+        condition: service_healthy
+    restart: always
+    environment:
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_DATABASE: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+    volumes:
+      - ./:/app
+    command:
+      - -f=app/project-moonbeam.yaml
+      - --multi-chain
+      - --db-schema=nifty-queries
+      - --disable-historical
+      - --unsafe
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://subquery-node-moonbeam:3002/ready"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
 
   subquery-node-moonriver:
     image: onfinality/subql-node-ethereum:latest
@@ -85,7 +85,7 @@ services:
       - ./:/app
     command:
       - -f=app/project-moonriver.yaml
-      # - --multi-chain
+      - --multi-chain
       - --db-schema=nifty-queries
       - --disable-historical
       - --unsafe
@@ -95,31 +95,31 @@ services:
       timeout: 5s
       retries: 10
 
-  # subquery-node-shiden:
-  #   image: onfinality/subql-node-ethereum:latest
-  #   depends_on:
-  #     "postgres":
-  #       condition: service_healthy
-  #   restart: always
-  #   environment:
-  #     DB_USER: postgres
-  #     DB_PASS: postgres
-  #     DB_DATABASE: postgres
-  #     DB_HOST: postgres
-  #     DB_PORT: 5432
-  #   volumes:
-  #     - ./:/app
-  #   command:
-  #     - -f=app/project-shiden.yaml
-  #     - --multi-chain
-  #     - --db-schema=nifty-queries
-  #     - --disable-historical
-  #     - --unsafe
-  #   healthcheck:
-  #     test: ["CMD", "curl", "-f", "http://subquery-node-shiden:3004/ready"]
-  #     interval: 3s
-  #     timeout: 5s
-  #     retries: 10
+  subquery-node-shiden:
+    image: onfinality/subql-node-ethereum:latest
+    depends_on:
+      "postgres":
+        condition: service_healthy
+    restart: always
+    environment:
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_DATABASE: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+    volumes:
+      - ./:/app
+    command:
+      - -f=app/project-shiden.yaml
+      - --multi-chain
+      - --db-schema=nifty-queries
+      - --disable-historical
+      - --unsafe
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://subquery-node-shiden:3004/ready"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
 
   graphql-engine:
     image: onfinality/subql-query:latest

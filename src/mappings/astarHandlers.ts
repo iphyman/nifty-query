@@ -11,8 +11,8 @@ export async function handleAstarTransfer(log: TransferLog): Promise<void> {
 
   let collection = await getCollection(log.address, Network.ASTAR);
   let nft = await getNft(collection.network, log);
-  let from = await getAccount(nft.network, log.args.from);
-  let to = await getAccount(nft.network, log.args.to);
+  let from = await getAccount(log.args.from);
+  let to = await getAccount(log.args.to);
 
   const id = [
     Network.ASTAR,
@@ -47,7 +47,7 @@ export async function handleAstarTofuSale(tx: RunTransaction) {
     const inventory = bundle[i];
 
     const token = await inventory.token;
-    const amount = parseFloat((await inventory.amount).toString());
+    const amount = BigInt((await inventory.amount).toString());
     // const tokenId = await inventory.tokenId;
     const kind = await inventory.kind;
 

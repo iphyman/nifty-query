@@ -2,6 +2,7 @@ import { Metadata, Network } from "../../types";
 import { TransferLog } from "../../types/abi-interfaces/Erc721Abi";
 import { Erc721Abi__factory } from "../../types/contracts";
 import { Account, Collection, Nft } from "../../types/models";
+import fetch from "node-fetch";
 
 function decodeURL(url: string) {
   const protocol = url.split(":")[0].toLowerCase();
@@ -75,7 +76,7 @@ export async function getCollection(address: string, network: Network) {
     contractAddress: address,
     name,
     symbol,
-    floorPrice: 0,
+    floorPrice: BigInt(0),
   });
 
   await collection.save();
@@ -84,13 +85,14 @@ export async function getCollection(address: string, network: Network) {
 
 export async function getNft(network: Network, event: TransferLog) {
   const id = [network, event.address, event.args!.tokenId.toString()].join("-");
+  const collectionId = [network, event.address].join("-");
   let nft = await Nft.get(id);
 
   if (nft != null) {
     return nft;
   }
 
-  const owner = await getAccount(network, event.args!.to);
+  const owner = await getAccount(event.args!.to);
   const contract = Erc721Abi__factory.connect(event.address, api);
   const tokenURI = await contract.tokenURI(event.args!.tokenId);
   const metadata = await decodeTokenURI(tokenURI);
@@ -99,7 +101,7 @@ export async function getNft(network: Network, event: TransferLog) {
     id,
     network,
     tokenId: event.args!.tokenId.toBigInt(),
-    collectionId: event.address,
+    collectionId,
     block: BigInt(event.blockNumber),
     timestamp: parseInt(event.block.timestamp.toString()),
     ownerId: owner.id,
@@ -114,8 +116,8 @@ export async function getNft(network: Network, event: TransferLog) {
   return nft;
 }
 
-export async function getAccount(network: Network, address: string) {
-  const id = [network, address].join("-");
+export async function getAccount(address: string) {
+  const id = address;
   let account = await Account.get(id);
 
   if (account != null) {
@@ -124,8 +126,8 @@ export async function getAccount(network: Network, address: string) {
 
   account = Account.create({
     id,
-    address,
-    network,
+    // address,
+    // network,
   });
 
   await account.save();

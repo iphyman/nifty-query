@@ -14,8 +14,8 @@ export async function handleMoonriverTransfer(log: TransferLog): Promise<void> {
 
   let collection = await getCollection(log.address, Network.MOONRIVER);
   let nft = await getNft(collection.network, log);
-  let from = await getAccount(nft.network, log.args.from);
-  let to = await getAccount(nft.network, log.args.to);
+  let from = await getAccount(log.args.from);
+  let to = await getAccount(log.args.to);
 
   const id = [log.blockNumber.toString(), log.logIndex.toString()].join("-");
   let event = NftTransfers.create({
@@ -47,7 +47,7 @@ export async function handleMoonriverMoonbeansListing(log: TokenListedLog) {
   if (!price) {
     price = Price.create({
       id: nftId,
-      amount: log.args.price.toNumber(),
+      amount: log.args.price.toBigInt(),
       marketplace: Marketplace.MOONBEANS,
     });
 
@@ -66,7 +66,7 @@ export async function handleMoonriverMoonbeansSale(log: TokenPurchasedLog) {
 
   const id = [Network.MOONRIVER, log.args.collection].join("-");
   const collection = await Collection.get(id);
-  const amount = log.args.price.toNumber();
+  const amount = log.args.price.toBigInt();
 
   if (collection && collection.floorPrice < amount) {
     collection.floorPrice = amount;

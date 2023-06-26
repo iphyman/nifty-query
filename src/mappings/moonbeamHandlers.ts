@@ -15,8 +15,8 @@ export async function handleMoonbeamTransfer(log: TransferLog): Promise<void> {
 
   let collection = await getCollection(log.address, Network.MOONBEAM);
   let nft = await getNft(collection.network, log);
-  let from = await getAccount(nft.network, log.args.from);
-  let to = await getAccount(nft.network, log.args.to);
+  let from = await getAccount(log.args.from);
+  let to = await getAccount(log.args.to);
 
   const id = [log.blockNumber.toString(), log.logIndex.toString()].join("-");
   let event = NftTransfers.create({
@@ -46,7 +46,7 @@ export async function handleMoonbeamMoonbeansListing(log: TokenListedLog) {
   if (!price) {
     price = Price.create({
       id: nftId,
-      amount: log.args.price.toNumber(),
+      amount: log.args.price.toBigInt(),
       marketplace: Marketplace.MOONBEANS,
     });
 
@@ -68,7 +68,7 @@ export async function handleMoonbeamMoonbeansSale(log: TokenPurchasedLog) {
   const amount = log.args.price.toNumber();
 
   if (collection && collection.floorPrice < amount) {
-    collection.floorPrice = amount;
+    collection.floorPrice = BigInt(amount);
     await collection.save();
   }
 }
@@ -87,7 +87,7 @@ export async function handleMoonbeamTofuSale(tx: RunTransaction) {
     const inventory = bundle[i];
 
     const token = await inventory.token;
-    const amount = parseFloat((await inventory.amount).toString());
+    const amount = BigInt((await inventory.amount).toString());
     // const tokenId = await inventory.tokenId;
     const kind = await inventory.kind;
 

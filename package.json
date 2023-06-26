@@ -32,6 +32,7 @@
     "@subql/node-ethereum": "latest",
     "@subql/testing": "latest",
     "@subql/types": "latest",
+    "@types/node-fetch": "^2.6.4",
     "ethers": "^5.7.2",
     "typescript": "4.5.5"
   }

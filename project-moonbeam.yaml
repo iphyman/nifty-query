@@ -19,12 +19,12 @@ network:
   chainId: "1284"
   endpoint:
     # - wss://moonbeam.api.onfinality.io/public-ws
-    - https://1rpc.io/glmr
+    - https://rpc.api.moonbeam.network
   dictionary: "https://api.subquery.network/sq/subquery/moonbeam-dictionary"
 
 dataSources:
   - kind: ethereum/Runtime
-    startBlock: 0
+    startBlock: 179679
     options:
       abi: erc721
     assets:
@@ -37,10 +37,10 @@ dataSources:
           kind: ethereum/LogHandler
           filter:
             topics:
-              - Transfer(indexed address,indexed address,indexed uint256)
+              - Transfer(address indexed from, address indexed to, uint256 indexed tokenId)
   # TofuNft Marketplace
   - kind: ethereum/Runtime
-    startBlock: 0
+    startBlock: 179679
     options:
       abi: tofuNft
       address: "0x7bc8b1B5AbA4dF3Be9f9A32daE501214dC0E4f3f"
@@ -61,7 +61,7 @@ dataSources:
         # - EvInventoryUpdate(uint256 indexed id,(address seller,address buyer,address currency,uint256 price,uint256 netPrice,uint256 deadline,uint8 kind,uint8 status) inventory)
   # Moonbeans Marketplace
   - kind: ethereum/Runtime
-    startBlock: 0
+    startBlock: 809491
     options:
       abi: moonbeans
       address: "0x683724817a7d526d6256Aec0D6f8ddF541b924de"

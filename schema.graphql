@@ -28,17 +28,11 @@ type Metadata @jsonField {
 }
 
 type Account @entity {
-  "network/account address"
+  "account address"
   id: ID!
-  "Account address"
-  address: String!
-  "Blockchain network"
-  network: Network!
 }
 
-type Collection
-  @entity
-  @compositeIndexes(fields: [["network", "contractAddress"]]) {
+type Collection @entity {
   "network + contractAddress"
   id: ID!
   "Deployed blockchain network"
@@ -52,14 +46,10 @@ type Collection
   "List of nfts"
   nfts: [Nft!]! @derivedFrom(field: "collection")
   "The lowest price for an item in this collection"
-  floorPrice: Float!
+  floorPrice: BigInt!
 }
 
-type Nft
-  @entity
-  @compositeIndexes(
-    fields: [["network", "collection"], ["collection", "tokenId"]]
-  ) {
+type Nft @entity {
   "netowrk + collectionAddress + tokenId"
   id: ID!
   "Deployed blockchain network"
@@ -94,7 +84,7 @@ type Price @entity {
   "network + collectionAddress + tokenId"
   id: ID!
   "Current item price"
-  amount: Float!
+  amount: BigInt!
   "Token address, null for items priced in native token"
   currency: String
   "The marketplace where nft is listed for sale"
