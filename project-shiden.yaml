@@ -23,11 +23,11 @@ network:
   dictionary: "https://api.subquery.network/sq/subquery/shiden-dictionary"
 
 dataSources:
+  # Any Standard ERC721
   - kind: ethereum/Runtime
     startBlock: 686000
     options:
       abi: erc721
-      # address: ""
     assets:
       erc721:
         file: "./abis/erc721.abi.json"
@@ -40,19 +40,18 @@ dataSources:
             topics:
               - Transfer(address indexed from, address indexed to, uint256 indexed tokenId)
     # TofuNft Marketplace
-  # - kind: ethereum/Runtime
-  #   startBlock: 686024
-  #   options:
-  #     abi: tofuNft
-  #     address: "0x7bc8b1B5AbA4dF3Be9f9A32daE501214dC0E4f3f"
-  #   assets:
-  #     tofuNft:
-  #       file: "./abis/tofuNft.abi.json"
-  #   mapping:
-  #     file: "./dist/index.js"
-  #     handlers:
-  #       - handler: handleShidenTofuSale
-  #         kind: ethereum/TransactionHandler
-  #         filter:
-  #           function: function run((address,(address,uint256,uint256,uint8,bytes)[],address,uint256,uint256,bytes32,uint8),(bytes32,address,uint256,bytes32,uint256,uint8,address,address,uint256,uint256,(uint256[],uint256,uint256,uint256,address,address),(address,uint256,uint256,uint8,bytes)[],uint256),bytes,bytes)
-  #           # function: function run(tuple(address user,tuple(address token,uint256 tokenId,uint256 amount,uint8 kind,bytes mintData)[] bundle,address currency,uint256 price,uint256 deadline,bytes32 salt,uint8 kind) intent,tuple(bytes32 intentionHash,address signer,uint256 txDeadline,bytes32 salt,uint256 id,uint8 opcode,address caller,address currency,uint256 price,uint256 incentiveRate,tuple(uint256[] coupons,uint256 feeRate,uint256 royaltyRate,uint256 buyerCashbackRate,address feeAddress,address royaltyAddress) settlement,tuple(address token,uint256 tokenId,uint256 amount,uint8 kind,bytes mintData)[] bundle,uint256 deadline) detail,bytes sigIntent,bytes sigDetail)
+  - kind: ethereum/Runtime
+    startBlock: 686024
+    options:
+      abi: tofuNft
+      address: "0x7bc8b1B5AbA4dF3Be9f9A32daE501214dC0E4f3f"
+    assets:
+      tofuNft:
+        file: "./abis/tofuNft.abi.json"
+    mapping:
+      file: "./dist/index.js"
+      handlers:
+        - handler: handleShidenTofuSale
+          kind: ethereum/TransactionHandler
+          filter:
+            function: "run((address,(address,uint256,uint256,uint8,bytes)[],address,uint256,uint256,bytes32,uint8),(bytes32,address,uint256,bytes32,uint256,uint8,address,address,uint256,uint256,(uint256[],uint256,uint256,uint256,address,address),(address,uint256,uint256,uint8,bytes)[],uint256),bytes,bytes)"

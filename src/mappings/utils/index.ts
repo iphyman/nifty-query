@@ -50,25 +50,31 @@ function decodeURL(url: string) {
 }
 
 async function decodeTokenURI(tokenURI: string) {
-  logger.info(`Docoding uri: ${tokenURI}`);
+  logger.info(`Decoding uri: ${tokenURI}`);
   const { url } = decodeURL(tokenURI);
+  let metadata: Metadata | null = null;
 
   if (!isValidUrl(url)) return null;
 
   const resp = await fetch(url);
-  const data = await resp.json();
+  const asText = await resp.text();
 
-  if (!data) return null;
+  try {
+    const data = JSON.parse(asText);
 
-  const { url: image } = decodeURL(data.image);
-  const metadata: Metadata = {
-    name: data.name,
-    description: data.description,
-    external_url: data.external_url ?? "",
-    image,
-    attributes: data.attributes,
-  };
+    if (!data) return null;
 
+    const { url: image } = decodeURL(data.image);
+    metadata = {
+      name: data.name,
+      description: data.description,
+      external_url: data.external_url ?? "",
+      image,
+      attributes: data.attributes,
+    };
+  } catch (error) {
+    logger.info("TokenURI returned invalid JSON metadata");
+  }
   return metadata;
 }
 
@@ -148,4 +154,18 @@ export async function getAccount(address: string) {
 
   await account.save();
   return account;
+}
+
+export async function updateFloorPrice(id: string, price: string) {
+  let collection = await Collection.get(id);
+  const amount = BigInt(price);
+
+  if (collection) {
+    if (collection.floorPrice === BigInt(0)) {
+      collection.floorPrice = amount;
+    } else if (collection.floorPrice > amount && amount > BigInt(0)) {
+      collection.floorPrice = amount;
+    }
+    await collection.save();
+  }
 }

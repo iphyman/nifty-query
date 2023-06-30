@@ -1,6 +1,6 @@
 import assert from "assert";
 import { TransferLog } from "../types/abi-interfaces/Erc721Abi";
-import { getAccount, getCollection, getNft } from "./utils";
+import { getAccount, getCollection, getNft, updateFloorPrice } from "./utils";
 import { Marketplace, Network } from "../types";
 import { Collection, Nft, NftTransfers, Price } from "../types/models";
 import {
@@ -68,13 +68,9 @@ export async function handleMoonbeamMoonbeansSale(log: TokenPurchasedLog) {
   assert(log.args, "No log.args");
 
   const id = [Network.MOONBEAM, log.args.collection].join("-");
-  const collection = await Collection.get(id);
-  const amount = log.args.price.toBigInt();
+  const amount = log.args.price.toString();
 
-  if (collection && collection.floorPrice < amount) {
-    collection.floorPrice = amount;
-    await collection.save();
-  }
+  await updateFloorPrice(id, amount);
 }
 
 export async function handleMoonbeamTofuSale(tx: RunTransaction) {
@@ -91,18 +87,13 @@ export async function handleMoonbeamTofuSale(tx: RunTransaction) {
     const inventory = bundle[i];
 
     const token = await inventory.token;
-    const amount = BigInt((await inventory.amount).toString());
+    const amount = (await inventory.amount).toString();
     // const tokenId = await inventory.tokenId;
     const kind = await inventory.kind;
 
     if (kind == TOKEN_721 && [1, 2, 4, 8, 9].includes(opcode)) {
       const id = [Network.MOONBEAM, token].join("-");
-      let collection = await Collection.get(id);
-
-      if (collection && collection.floorPrice < amount) {
-        collection.floorPrice = amount;
-        await collection.save();
-      }
+      await updateFloorPrice(id, amount);
     }
   }
 }

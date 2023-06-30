@@ -1,6 +1,6 @@
 import assert from "assert";
 import { TransferLog } from "../types/abi-interfaces/Erc721Abi";
-import { getAccount, getCollection, getNft } from "./utils";
+import { getAccount, getCollection, getNft, updateFloorPrice } from "./utils";
 import { Marketplace, Network } from "../types";
 import { Collection, Nft, NftTransfers, Price } from "../types/models";
 import {
@@ -69,11 +69,7 @@ export async function handleMoonriverMoonbeansSale(log: TokenPurchasedLog) {
   assert(log.args, "No log.args");
 
   const id = [Network.MOONRIVER, log.args.collection].join("-");
-  const collection = await Collection.get(id);
-  const amount = log.args.price.toBigInt();
+  const amount = log.args.price.toString();
 
-  if (collection && collection.floorPrice < amount) {
-    collection.floorPrice = amount;
-    await collection.save();
-  }
+  await updateFloorPrice(id, amount);
 }

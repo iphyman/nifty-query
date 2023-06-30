@@ -9,7 +9,7 @@ runner:
   query:
     name: "@subql/query"
     version: "*"
-description: "A multi-chain nft indexer for Astar, Moonbeam, Moonrive and Shiden"
+description: "A multi-chain nft indexer for Astar, Moonbeam, Moonriver and Shiden"
 repository: "https://github.com/iphyman/nifty-query"
 
 schema:
@@ -24,10 +24,9 @@ network:
 
 dataSources:
   - kind: ethereum/Runtime
-    startBlock: 2847359
+    startBlock: 179679
     options:
       abi: erc721
-      # address: "0x224AcB257f1E95Fe310E1ab9BB402C579bC5eeAE"
     assets:
       erc721:
         file: "./abis/erc721.abi.json"
@@ -40,27 +39,22 @@ dataSources:
             topics:
               - Transfer(address indexed from, address indexed to, uint256 indexed tokenId)
   # TofuNft Marketplace
-  # - kind: ethereum/Runtime
-  #   startBlock: 179679
-  #   options:
-  #     abi: tofuNft
-  #     address: "0x7bc8b1B5AbA4dF3Be9f9A32daE501214dC0E4f3f"
-  #   assets:
-  #     tofuNft:
-  #       file: "./abis/tofuNft.abi.json"
-  #   mapping:
-  #     file: "./dist/index.js"
-  #     handlers:
-  #       - handler: handleMoonbeamTofuSale
-  #         kind: ethereum/TransactionHandler
-  #         filter:
-  #           # function: "0xba847759"
-  #           function: function run((address,(address,uint256,uint256,uint8,bytes)[],address,uint256,uint256,bytes32,uint8),(bytes32,address,uint256,bytes32,uint256,uint8,address,address,uint256,uint256,(uint256[],uint256,uint256,uint256,address,address),(address,uint256,uint256,uint8,bytes)[],uint256),bytes,bytes)
-  # - handler: handleTofuListing
-  # kind: ethereum/LogHandler
-  # filter:
-  # topics:
-  # - EvInventoryUpdate(uint256 indexed id,(address seller,address buyer,address currency,uint256 price,uint256 netPrice,uint256 deadline,uint8 kind,uint8 status) inventory)
+  - kind: ethereum/Runtime
+    startBlock: 179679
+    options:
+      abi: tofuNft
+      address: "0x7bc8b1B5AbA4dF3Be9f9A32daE501214dC0E4f3f"
+    assets:
+      tofuNft:
+        file: "./abis/tofuNft.abi.json"
+    mapping:
+      file: "./dist/index.js"
+      handlers:
+        - handler: handleMoonbeamTofuSale
+          kind: ethereum/TransactionHandler
+          filter:
+            function: "run((address,tuple[],address,uint256,uint256,bytes32,uint8),(bytes32,address,uint256,bytes32,uint256,uint8,address,address,uint256,uint256,tuple,tuple[],uint256),bytes,bytes)"
+
   # Moonbeans Marketplace
   - kind: ethereum/Runtime
     startBlock: 809491

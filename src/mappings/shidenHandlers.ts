@@ -1,6 +1,6 @@
 import assert from "assert";
 import { TransferLog } from "../types/abi-interfaces/Erc721Abi";
-import { getAccount, getCollection, getNft } from "./utils";
+import { getAccount, getCollection, getNft, updateFloorPrice } from "./utils";
 import { Network } from "../types";
 import { Collection, NftTransfers } from "../types/models";
 import { RunTransaction } from "../types/abi-interfaces/TofuNftAbi";
@@ -47,18 +47,13 @@ export async function handleShidenTofuSale(tx: RunTransaction) {
     const inventory = bundle[i];
 
     const token = await inventory.token;
-    const amount = BigInt((await inventory.amount).toString());
+    const amount = (await inventory.amount).toString();
     // const tokenId = await inventory.tokenId;
     const kind = await inventory.kind;
 
     if (kind == TOKEN_721 && [1, 2, 4, 8, 9].includes(opcode)) {
       const id = [Network.SHIDEN, token].join("-");
-      let collection = await Collection.get(id);
-
-      if (collection && collection.floorPrice < amount) {
-        collection.floorPrice = amount;
-        await collection.save();
-      }
+      await updateFloorPrice(id, amount);
     }
   }
 }

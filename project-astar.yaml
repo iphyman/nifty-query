@@ -20,7 +20,7 @@ network:
   endpoint:
     # - https://astar.api.onfinality.io/public
     # - wss://astar.api.onfinality.io/public-ws
-    - https://1rpc.io/astr
+    - https://evm.astar.network
   dictionary: "https://api.subquery.network/sq/subquery/astar-dictionary"
 
 dataSources:
@@ -41,19 +41,18 @@ dataSources:
             topics:
               - Transfer(address indexed from, address indexed to, uint256 indexed tokenId)
   # TofuNft Marketplace
-  # - kind: ethereum/Runtime
-  #   startBlock: 225714
-  #   options:
-  #     abi: tofuNft
-  #     address: "0x7Cae7FeB55349FeADB8f84468F692450D92597bc"
-  #   assets:
-  #     tofuNft:
-  #       file: "./abis/tofuNft.abi.json"
-  #   mapping:
-  #     file: "./dist/index.js"
-  #     handlers:
-  #       - handler: handleAstarTofuSale
-  #         kind: ethereum/TransactionHandler
-  #         filter:
-  #           # function: "0xba847759"
-  #           function: function run((address,(address,uint256,uint256,uint8,bytes)[],address,uint256,uint256,bytes32,uint8),(bytes32,address,uint256,bytes32,uint256,uint8,address,address,uint256,uint256,(uint256[],uint256,uint256,uint256,address,address),(address,uint256,uint256,uint8,bytes)[],uint256),bytes,bytes)
+  - kind: ethereum/Runtime
+    startBlock: 225714
+    options:
+      abi: tofuNft
+      address: "0x7Cae7FeB55349FeADB8f84468F692450D92597bc"
+    assets:
+      tofuNft:
+        file: "./abis/tofuNft.abi.json"
+    mapping:
+      file: "./dist/index.js"
+      handlers:
+        - handler: handleAstarTofuSale
+          kind: ethereum/TransactionHandler
+          filter:
+            function: run((address,(address,uint256,uint256,uint8,bytes)[],address,uint256,uint256,bytes32,uint8),(bytes32,address,uint256,bytes32,uint256,uint8,address,address,uint256,uint256,(uint256[],uint256,uint256,uint256,address,address),(address,uint256,uint256,uint8,bytes)[],uint256),bytes,bytes)
