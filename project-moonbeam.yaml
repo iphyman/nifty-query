@@ -53,7 +53,7 @@ dataSources:
         - handler: handleMoonbeamTofuSale
           kind: ethereum/TransactionHandler
           filter:
-            function: "run((address,tuple[],address,uint256,uint256,bytes32,uint8),(bytes32,address,uint256,bytes32,uint256,uint8,address,address,uint256,uint256,tuple,tuple[],uint256),bytes,bytes)"
+            function: "run((address,(address,uint256,uint256,uint8,bytes)[],address,uint256,uint256,bytes32,uint8),(bytes32,address,uint256,bytes32,uint256,uint8,address,address,uint256,uint256,(uint256[],uint256,uint256,uint256,address,address),(address,uint256,uint256,uint8,bytes)[],uint256),bytes,bytes)"
 
   # Moonbeans Marketplace
   - kind: ethereum/Runtime

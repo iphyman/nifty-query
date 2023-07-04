@@ -64,7 +64,7 @@ services:
       - --disable-historical
       - --unsafe
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://subquery-node-moonbeam:3002/ready"]
+      test: ["CMD", "curl", "-f", "http://subquery-node-moonbeam:3009/ready"]
       interval: 3s
       timeout: 5s
       retries: 10

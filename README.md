@@ -2,7 +2,7 @@
 
 A project submission for the Moonbeam Bear Necesseties Hackathon; SubQuery challenge
 
-[Demo Video](https://vimeo.com/839894878)
+[Demo Video](https://vimeo.com/842324527)
 
 NiftyQuery is a meticulously designed and highly detailed ERC721 Non-Fungible Token (NFT) standard indexer. This exceptional indexer is capable of efficiently indexing NFTs across various prominent blockchains, including Astar, Moonbeam, Moonriver, and Shidden. To achieve this remarkable feat, we leverage the powerful SubQuery multi-chain indexing solution, which enables seamless indexing across multiple blockchains simultaneously. The primary objective of this indexer is to provide a unified and streamlined experience for users by exposing a single, all-encompassing GraphQL API that facilitates querying across these diverse blockchains.
 
@@ -48,7 +48,13 @@ cd nifty-query
 yarn
 ```
 
-4. Pull the required Docker images and start the containers using Docker Compose:
+4. Generate schema types and build:
+
+```sh
+yarn codegen && yarn build
+```
+
+5. Pull the required Docker images and start the containers using Docker Compose:
 
 ```sh
 docker compose pull && docker compose up
@@ -86,7 +92,7 @@ query {
 
 Collections
 
-```
+```graphQl
 query {
   collections(first: 20) {
     nodes {
@@ -102,7 +108,7 @@ query {
 
 Accounts
 
-```
+```graphQl
 query {
   accounts(first: 20) {
     nodes {
