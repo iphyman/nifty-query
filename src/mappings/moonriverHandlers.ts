@@ -9,30 +9,34 @@ import {
 } from "../types/abi-interfaces/MoonbeansAbi";
 
 export async function handleMoonriverTransfer(log: TransferLog): Promise<void> {
-  if (log.topics.length !== 4) return;
   logger.info(`New Nft transfer transaction log at block ${log.blockNumber}`);
   assert(log.args, "No log.args");
 
   let collection = await getCollection(log.address, Network.MOONRIVER);
-  let nft = await getNft(collection.network, log);
 
-  if (nft) {
-    let from = await getAccount(log.args.from);
-    let to = await getAccount(log.args.to);
+  if (collection) {
+    let nft = await getNft(collection.network, log);
 
-    const id = [log.blockNumber.toString(), log.logIndex.toString()].join("-");
-    let event = NftTransfers.create({
-      id,
-      network: nft.network,
-      nftId: nft.id,
-      block: BigInt(log.blockNumber),
-      timestamp: parseInt(log.block.timestamp.toString()),
-      transactionId: log.transactionHash,
-      fromId: from.id,
-      toId: to.id,
-    });
+    if (nft) {
+      let from = await getAccount(log.args.from);
+      let to = await getAccount(log.args.to);
 
-    await event.save();
+      const id = [log.blockNumber.toString(), log.logIndex.toString()].join(
+        "-"
+      );
+      let event = NftTransfers.create({
+        id,
+        network: nft.network,
+        nftId: nft.id,
+        block: BigInt(log.blockNumber),
+        timestamp: parseInt(log.block.timestamp.toString()),
+        transactionId: log.transactionHash,
+        fromId: from.id,
+        toId: to.id,
+      });
+
+      await event.save();
+    }
   }
 }
 

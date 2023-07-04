@@ -87,19 +87,25 @@ export async function getCollection(address: string, network: Network) {
   }
 
   const contract = Erc721Abi__factory.connect(address, api);
-  const name = (await contract.name()) ?? "";
-  const symbol = (await contract.symbol()) ?? "";
+  try {
+    const isERC721 = await contract.supportsInterface("0x80ac58cd");
 
-  collection = Collection.create({
-    id,
-    network,
-    contractAddress: address,
-    name,
-    symbol,
-    floorPrice: BigInt(0),
-  });
+    if (isERC721) {
+      const name = (await contract.name()) ?? "";
+      const symbol = (await contract.symbol()) ?? "";
 
-  await collection.save();
+      collection = Collection.create({
+        id,
+        network,
+        contractAddress: address,
+        name,
+        symbol,
+        floorPrice: BigInt(0),
+      });
+
+      await collection.save();
+    }
+  } catch (error) {}
   return collection;
 }
 
